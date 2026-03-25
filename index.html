@@ -5,22 +5,65 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stedje AI</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
-    #chat-container { width: 400px; max-width: 90%; background: #fff; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
-    #chat { padding: 20px; flex: 1; overflow-y: auto; }
-    .message { margin: 10px 0; padding: 10px; border-radius: 8px; max-width: 80%; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    #chat-container {
+      width: 400px;
+      max-width: 90%;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    #chat {
+      padding: 20px;
+      flex: 1;
+      overflow-y: auto;
+    }
+    .message {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 8px;
+      max-width: 80%;
+      word-wrap: break-word;
+    }
     .user { background: #007bff; color: white; align-self: flex-end; }
     .bot { background: #e5e5ea; color: black; align-self: flex-start; }
-    #input-container { display: flex; border-top: 1px solid #ccc; }
-    #input { flex: 1; padding: 10px; border: none; border-radius: 0 0 0 10px; outline: none; }
-    #send { padding: 10px; border: none; background: #007bff; color: white; cursor: pointer; border-radius: 0 0 10px 0; }
+    #input-container {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+    #input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      outline: none;
+      border-radius: 0 0 0 10px;
+    }
+    #send {
+      padding: 10px;
+      border: none;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+      border-radius: 0 0 10px 0;
+    }
   </style>
 </head>
 <body>
   <div id="chat-container">
     <div id="chat"></div>
     <div id="input-container">
-      <input type="text" id="input" placeholder="Ask Stedje AI something..." />
+      <input id="input" placeholder="Ask Stedje AI something..." />
       <button id="send">Send</button>
     </div>
   </div>
@@ -31,7 +74,7 @@
     const send = document.getElementById('send');
 
     send.addEventListener('click', askAI);
-    input.addEventListener('keypress', function(e) {
+    input.addEventListener('keypress', e => {
       if (e.key === 'Enter') askAI();
     });
 
@@ -79,7 +122,6 @@
 
       addMessage(userInput, 'user');
       input.value = '';
-
       showTyping();
 
       try {
@@ -88,7 +130,6 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: userInput })
         });
-
         const data = await res.json();
         removeTyping();
         typeMessage(data.reply, 'bot');
