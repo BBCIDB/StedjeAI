@@ -2,6 +2,7 @@ import express from "express";
 
 const app = express();
 app.use(express.json());
+app.use(express.static("."));
 
 const API_KEY = process.env.OPENAI_API_KEY;
 
@@ -18,7 +19,7 @@ app.post("/chat", async (req, res) => {
       body: JSON.stringify({
         model: "gpt-4o-mini",
         messages: [
-          { role: "system", content: "You are Stedje AI, a math teacher." },
+          { role: "system", content: "You are Stedje AI, a helpful math teacher." },
           { role: "user", content: userMessage }
         ]
       })
@@ -27,9 +28,10 @@ app.post("/chat", async (req, res) => {
     const data = await response.json();
     res.json({ reply: data.choices[0].message.content });
 
-  } catch {
-    res.status(500).json({ error: "error" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
-app.listen(3000);
+app.listen(3000, () => console.log("Stedje AI backend running on port 3000"));
