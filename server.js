@@ -4,6 +4,7 @@ const app = express();
 app.use(express.json());
 app.use(express.static("."));
 
+// Use the environment variable set in Render
 const API_KEY = process.env.OPENAI_API_KEY;
 
 app.post("/chat", async (req, res) => {
@@ -27,11 +28,12 @@ app.post("/chat", async (req, res) => {
 
     const data = await response.json();
     res.json({ reply: data.choices[0].message.content });
-
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
   }
 });
 
-app.listen(3000, () => console.log("Stedje AI backend running on port 3000"));
+// Use Render’s dynamic port
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Stedje AI backend running on port ${PORT}`));
